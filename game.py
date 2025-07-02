@@ -1,6 +1,6 @@
 from settings import *
 from board import Board
-#adding a comment to the new branch
+
 
 class Game():
     def __init__(self):

@@ -68,21 +68,22 @@ class Board(pygame.sprite.Sprite):
         if self.pieces.get((new_row, new_colomn)):
             self.pieces[(new_row, new_colomn)].kill()
         if type(piece) == King:
-            if piece.color == "white":
-                if new_colomn == 6:
-                    rook = self.pieces.get((7, 7))
-                    self.move(rook, 7, 7, 7, 5)
-                elif new_colomn == 2:
-                    rook = self.pieces.get((7, 0))
-                    self.move(rook, 7, 0, 7, 3)
-            elif piece.color == "black":
-                if new_colomn == 6:
-                    rook = self.pieces.get((0, 7))
-                    self.move(rook, 0, 7, 0, 5)
-                elif new_colomn == 2:
-                    rook = self.pieces.get((0, 0))
-                    self.move(rook, 0, 0, 0, 3)
-            self.turn = piece.color
+            if old_colomn == 4:
+                if piece.color == "white":
+                    if new_colomn == 6:
+                        rook = self.pieces.get((7, 7))
+                        self.move(rook, 7, 7, 7, 5)
+                    elif new_colomn == 2:
+                        rook = self.pieces.get((7, 0))
+                        self.move(rook, 7, 0, 7, 3)
+                elif piece.color == "black":
+                    if new_colomn == 6:
+                        rook = self.pieces.get((0, 7))
+                        self.move(rook, 0, 7, 0, 5)
+                    elif new_colomn == 2:
+                        rook = self.pieces.get((0, 0))
+                        self.move(rook, 0, 0, 0, 3)
+                self.turn = piece.color
         if type(piece) == Pawn:
             if piece.color == "white" and new_row == 0 or piece.color == "black" and new_row == 7:
                 piece.kill()

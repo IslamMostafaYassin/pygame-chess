@@ -11,7 +11,6 @@ class Piece(pygame.sprite.Sprite):
         self.color = color
         self.tile = tile
         self.board = board
-        self.type = type
         self.first_move = True
 
     def get_legal_moves(self):
@@ -139,7 +138,7 @@ class Pawn(Piece):
                     (temp_row, temp_colomn))
                 if potentially_doomed_piece:
                     break
-                if not self.first_move and counter==1:
+                if not self.first_move and counter == 1:
                     break
                 self.legal_moves.append((temp_row, temp_colomn))
                 counter += 1
