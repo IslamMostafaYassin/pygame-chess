@@ -30,8 +30,11 @@ class Tile(pygame.sprite.Sprite):
             return True
         return False
 
-    def highlight(self):
-        pygame.draw.rect(self.image, "cyan", self.image.get_frect(), 1)
+    def highlight(self, capture_piece=False):
+        if capture_piece:
+            pygame.draw.rect(self.image, "red", self.image.get_frect(), 1)
+        else:
+            pygame.draw.rect(self.image, "cyan", self.image.get_frect(), 1)
 
     def unhighlight(self):
         self.image.fill((255, 255, 255, 0))
