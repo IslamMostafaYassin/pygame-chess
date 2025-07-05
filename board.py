@@ -21,12 +21,13 @@ class Board(pygame.sprite.Sprite):
             self.pieces_images.append(image)
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
+        self.highlighted_tiles = []
 
         # make tiles
         self.tiles = {}
         for row in range(NUM_OF_TILES):
             for colomn in range(NUM_OF_TILES):
-                tile = Tile(row, colomn, self, (self.game.tile_group))
+                tile = Tile(row, colomn, self, (self.game.all_group))
                 self.tiles[(row, colomn)] = tile
 
         starting_pieces = [
@@ -61,6 +62,19 @@ class Board(pygame.sprite.Sprite):
             piece = piece(
                 self.pieces_images[frame], self.tiles[pos], color, self, self.game.all_group)
             self.pieces[pos] = piece
+
+    def highlight_moves(self):
+        piece = self.pieces.get(
+            (self.piece_clicked_row, self.piece_clicked_colomn))
+        for row, colomn in piece.get_legal_moves():
+            tile = self.tiles[(row, colomn)]
+            tile.highlight()
+            self.highlighted_tiles.append(tile)
+
+    def unhighlight_moves(self):
+        for tile in self.highlighted_tiles:
+            tile.unhighlight()
+        self.highlighted_tiles = []
 
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
         piece.move(self.tiles[new_row, new_colomn])
@@ -101,7 +115,4 @@ class Board(pygame.sprite.Sprite):
         self.pieces.pop((old_row, old_colomn))
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
-        if self.turn == "white":
-            self.turn = "black"
-        else:
-            self.turn = "white"
+        self.turn = "white" if self.turn == "black" else "black"

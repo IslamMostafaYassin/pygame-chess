@@ -20,7 +20,7 @@ class Piece(pygame.sprite.Sprite):
             for i, j in similar_directions:
                 temp_row = self.tile.row+i
                 temp_colomn = self.tile.colomn+j
-                if not 0 <= temp_row <= 7 and not 0 <= temp_colomn <= 7:
+                if not 0 <= temp_row <= 7 or not 0 <= temp_colomn <= 7:
                     break
                 potentially_doomed_piece = self.board.pieces.get((
                     temp_row, temp_colomn))
@@ -81,7 +81,7 @@ class King(Piece):
             for i, j in similar_directions:
                 temp_row = self.tile.row+i
                 temp_colomn = self.tile.colomn+j
-                if not 0 <= temp_row <= 7 and not 0 <= temp_colomn <= 7:
+                if not 0 <= temp_row <= 7 or not 0 <= temp_colomn <= 7:
                     break
                 potentially_doomed_piece = self.board.pieces.get((
                     temp_row, temp_colomn))
@@ -132,7 +132,7 @@ class Pawn(Piece):
             for i, j in similar_directions:
                 temp_row = self.tile.row+i if self.color == "white" else self.tile.row-i
                 temp_colomn = self.tile.colomn+j if self.color == "white" else self.tile.colomn-j
-                if not 0 <= temp_row <= 7 and not 0 <= temp_colomn <= 7:
+                if not 0 <= temp_row <= 7 or not 0 <= temp_colomn <= 7:
                     break
                 potentially_doomed_piece = self.board.pieces.get(
                     (temp_row, temp_colomn))
