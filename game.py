@@ -1,6 +1,6 @@
 from settings import *
 from board import Board
-#adding a comment to the new branch
+
 
 class Game():
     def __init__(self):
@@ -11,7 +11,6 @@ class Game():
 
         # make groups
         self.all_group = pygame.sprite.Group()
-        self.tile_group = pygame.sprite.Group()
 
         # make board
         self.board = Board(self, self.all_group)
@@ -25,7 +24,6 @@ class Game():
             # update
             self.display_window.fill("grey")
             self.all_group.update()
-            self.tile_group.update()
 
             # draw
             self.all_group.draw(self.display_window)

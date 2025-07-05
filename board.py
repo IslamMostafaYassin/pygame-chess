@@ -21,12 +21,13 @@ class Board(pygame.sprite.Sprite):
             self.pieces_images.append(image)
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
+        self.highlighted_tiles = []
 
         # make tiles
         self.tiles = {}
         for row in range(NUM_OF_TILES):
             for colomn in range(NUM_OF_TILES):
-                tile = Tile(row, colomn, self, (self.game.tile_group))
+                tile = Tile(row, colomn, self, (self.game.all_group))
                 self.tiles[(row, colomn)] = tile
 
         starting_pieces = [
@@ -62,27 +63,41 @@ class Board(pygame.sprite.Sprite):
                 self.pieces_images[frame], self.tiles[pos], color, self, self.game.all_group)
             self.pieces[pos] = piece
 
+    def highlight_moves(self):
+        piece = self.pieces.get(
+            (self.piece_clicked_row, self.piece_clicked_colomn))
+        for row, colomn in piece.get_legal_moves():
+            tile = self.tiles[(row, colomn)]
+            tile.highlight()
+            self.highlighted_tiles.append(tile)
+
+    def unhighlight_moves(self):
+        for tile in self.highlighted_tiles:
+            tile.unhighlight()
+        self.highlighted_tiles = []
+
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
         piece.move(self.tiles[new_row, new_colomn])
         piece.first_move = False
         if self.pieces.get((new_row, new_colomn)):
             self.pieces[(new_row, new_colomn)].kill()
         if type(piece) == King:
-            if piece.color == "white":
-                if new_colomn == 6:
-                    rook = self.pieces.get((7, 7))
-                    self.move(rook, 7, 7, 7, 5)
-                elif new_colomn == 2:
-                    rook = self.pieces.get((7, 0))
-                    self.move(rook, 7, 0, 7, 3)
-            elif piece.color == "black":
-                if new_colomn == 6:
-                    rook = self.pieces.get((0, 7))
-                    self.move(rook, 0, 7, 0, 5)
-                elif new_colomn == 2:
-                    rook = self.pieces.get((0, 0))
-                    self.move(rook, 0, 0, 0, 3)
-            self.turn = piece.color
+            if old_colomn == 4:
+                if piece.color == "white":
+                    if new_colomn == 6:
+                        rook = self.pieces.get((7, 7))
+                        self.move(rook, 7, 7, 7, 5)
+                    elif new_colomn == 2:
+                        rook = self.pieces.get((7, 0))
+                        self.move(rook, 7, 0, 7, 3)
+                elif piece.color == "black":
+                    if new_colomn == 6:
+                        rook = self.pieces.get((0, 7))
+                        self.move(rook, 0, 7, 0, 5)
+                    elif new_colomn == 2:
+                        rook = self.pieces.get((0, 0))
+                        self.move(rook, 0, 0, 0, 3)
+                self.turn = piece.color
         if type(piece) == Pawn:
             if piece.color == "white" and new_row == 0 or piece.color == "black" and new_row == 7:
                 piece.kill()
@@ -100,7 +115,4 @@ class Board(pygame.sprite.Sprite):
         self.pieces.pop((old_row, old_colomn))
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
-        if self.turn == "white":
-            self.turn = "black"
-        else:
-            self.turn = "white"
+        self.turn = "white" if self.turn == "black" else "black"

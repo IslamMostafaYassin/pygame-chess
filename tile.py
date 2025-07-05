@@ -4,7 +4,8 @@ from settings import *
 class Tile(pygame.sprite.Sprite):
     def __init__(self, row, colomn, board, groups):
         super().__init__(groups)
-        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE), pygame.SRCALPHA)
+        self.image.fill((255, 255, 255, 0))
         self.rect = self.image.get_frect(
             topleft=(colomn*TILE_SIZE, row*TILE_SIZE))
         self.row = row
@@ -29,17 +30,28 @@ class Tile(pygame.sprite.Sprite):
             return True
         return False
 
+    def highlight(self):
+        pygame.draw.rect(self.image, "cyan", self.image.get_frect(), 1)
+
+    def unhighlight(self):
+        self.image.fill((255, 255, 255, 0))
+
     def update(self):
+        # self.image.fill((255, 255, 255, 0))
         old_row = self.board.piece_clicked_row
         old_colomn = self.board.piece_clicked_colomn
         old_piece = self.board.pieces.get((old_row, old_colomn))
         new_piece = self.board.pieces.get((self.row, self.colomn))
         if self.picking_piece(new_piece):
+            self.board.unhighlight_moves()
             self.board.piece_clicked_row = self.row
             self.board.piece_clicked_colomn = self.colomn
+            self.board.highlight_moves()
         elif self.putting_piece(old_piece):
+            self.board.unhighlight_moves()
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
         elif self.left_clicked():
+            self.board.unhighlight_moves()
             self.board.piece_clicked_row = -1
             self.board.piece_clicked_colomn = -1
