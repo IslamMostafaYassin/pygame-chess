@@ -8,6 +8,7 @@ class Board(pygame.sprite.Sprite):
         super().__init__(groups)
         self.game = game
         self.turn = "white"
+        self.looked_for_checks=False
         self.image = pygame.image.load("images/Board.png").convert_alpha()
         self.image = pygame.transform.scale(
             self.image, (WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -117,3 +118,12 @@ class Board(pygame.sprite.Sprite):
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
         self.turn = "white" if self.turn == "black" else "black"
+    
+    def find_check(self,color):
+        for piece in self.pieces.values():
+            if piece.color!=color:
+                potential_checks=piece.get_legal_moves()
+                for row,colomn in potential_checks:
+                    if type(self.pieces.get((row,colomn)))==King:
+                        print(f"{color} is in check")
+
