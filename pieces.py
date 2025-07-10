@@ -147,6 +147,6 @@ class Pawn(Piece):
             temp_colomn = self.tile.colomn+j if self.color == "white" else self.tile.colomn-j
             potentially_doomed_piece = self.board.pieces.get(
                 (temp_row, temp_colomn))
-            if potentially_doomed_piece and potentially_doomed_piece.color != self.board.turn:
+            if potentially_doomed_piece and potentially_doomed_piece.color != self.color:
                 self.legal_moves.append((temp_row, temp_colomn))
         return self.legal_moves

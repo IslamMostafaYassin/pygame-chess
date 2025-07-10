@@ -54,6 +54,7 @@ class Tile(pygame.sprite.Sprite):
             self.board.unhighlight_moves()
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
+            self.board.find_check("black" if self.board.turn=="white" else "white")
             self.board.find_check(self.board.turn)
         elif self.left_clicked():
             self.board.unhighlight_moves()
