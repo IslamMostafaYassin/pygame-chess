@@ -36,6 +36,10 @@ class Tile(pygame.sprite.Sprite):
         else:
             pygame.draw.rect(self.image, "cyan", self.image.get_frect(), 1)
 
+
+    def pink_highlight(self, capture_piece=False):
+        pygame.draw.rect(self.image, "pink", self.image.get_frect())
+
     def unhighlight(self):
         self.image.fill((255, 255, 255, 0))
 
@@ -51,8 +55,6 @@ class Tile(pygame.sprite.Sprite):
             self.board.piece_clicked_colomn = self.colomn
             self.board.highlight_moves()
         elif self.putting_piece(old_piece):
-            if self.board.checked_king_pos:
-                self.board.unhighlight_moves(*self.board.checked_king_pos)
             self.board.unhighlight_moves()
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
@@ -60,7 +62,10 @@ class Tile(pygame.sprite.Sprite):
             if self.board.find_check("black" if self.board.turn=="white" else "white"):
                 self.board.ctrl_z()
             elif self.board.find_check(self.board.turn):
-                pass
+                self.board.tiles[*self.board.checked_king_pos].pink_highlight()
+            else:
+                for tile in self.board.tiles.values():
+                    tile.unhighlight()
             print(self.board.checked_king_pos)
 
         elif self.left_clicked():
