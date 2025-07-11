@@ -8,8 +8,7 @@ class Board(pygame.sprite.Sprite):
         super().__init__(groups)
         self.game = game
         self.turn = "white"
-        self.king_pos=tuple()
-        self.looked_for_checks=False
+        self.checked_king_pos=tuple()
         self.image = pygame.image.load("images/Board.png").convert_alpha()
         self.image = pygame.transform.scale(
             self.image, (WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -125,6 +124,7 @@ class Board(pygame.sprite.Sprite):
         self.piece_clicked_row = -1
         self.piece_clicked_colomn = -1
         self.turn = "white" if self.turn == "black" else "black"
+        self.checked_king_pos=tuple()
     
     def find_check(self,color):
         for piece in self.pieces.values():
@@ -133,23 +133,18 @@ class Board(pygame.sprite.Sprite):
                 for row,colomn in potential_checks:
                     if type(self.pieces.get((row,colomn)))==King:
                         print(f"{color} is in check")
-                        self.king_pos=(row,colomn)
+                        self.checked_king_pos=(row,colomn)
                         return True
                     
-    def pink_highlight(self,row,colomn):
-        self.tiles[(row,colomn)].pink_highlight()
     
     
-    def ctrl_z(self,check=False):
+    def ctrl_z(self):
         if self.game.move_history:
             last_snap_shot = self.game.move_history[-1]
             self.game.move_history.pop()
             last_snap_shot.apply()
-            if self.king_pos:
-                self.tiles[*self.king_pos].unhighlight()
-            if check:
-                self.tiles[*self.king_pos].pink_highlight()
             print("go back")
+            print(self.checked_king_pos)
 
     def update(self):
         if pygame.key.get_pressed()[pygame.K_LCTRL] and pygame.key.get_just_pressed()[pygame.K_z]:

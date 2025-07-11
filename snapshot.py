@@ -1,8 +1,9 @@
 from settings import *
 
 class Snap_Shot():
-    def __init__(self,board,moved_piece,captured_piece,old_row,old_colomn,new_row,new_colomn,turn):
+    def __init__(self,board,moved_piece,captured_piece,old_row,old_colomn,new_row,new_colomn,turn,):
         self.board=board
+        self.checked_king_pos=self.board.checked_king_pos
         self.moved_piece=moved_piece
         self.captured_piece=captured_piece
         self.old_row=old_row
@@ -18,8 +19,10 @@ class Snap_Shot():
         self.board.pieces[(self.old_row,self.old_colomn)]=self.moved_piece
         if self.board.pieces.get((self.new_row, self.new_colomn)):
             self.board.pieces.pop((self.new_row, self.new_colomn))
+        self.moved_piece.add(self.board.game.all_group)
         if self.captured_piece:
             self.captured_piece.first_move = self.captured_first_move
             self.captured_piece.add(self.board.game.all_group)
             self.board.pieces[(self.new_row, self.new_colomn)] = self.captured_piece
         self.board.turn=self.turn
+        self.board.checked_king_pos=self.checked_king_pos
