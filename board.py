@@ -8,6 +8,7 @@ class Board(pygame.sprite.Sprite):
         super().__init__(groups)
         self.game = game
         self.turn = "white"
+        self.king_pos=tuple()
         self.looked_for_checks=False
         self.image = pygame.image.load("images/Board.png").convert_alpha()
         self.image = pygame.transform.scale(
@@ -73,15 +74,18 @@ class Board(pygame.sprite.Sprite):
             tile.highlight(True) if capturable_piece else tile.highlight()
             self.highlighted_tiles.append(tile)
 
-    def unhighlight_moves(self):
+    def unhighlight_moves(self,row=None,colomn=None):
+        if row and colomn:
+            self.tiles[(row,colomn)].unhighlight()
+            return
         for tile in self.highlighted_tiles:
             tile.unhighlight()
         self.highlighted_tiles = []
 
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
         captured_piece=self.pieces.get((new_row,new_colomn))
-        self.game.snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
-        # self.game.move_history.append(snap_shot)
+        snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
+        self.game.move_history.append(snap_shot)
         piece.move(self.tiles[new_row, new_colomn])
         piece.first_move = False
         if self.pieces.get((new_row, new_colomn)):
@@ -129,8 +133,26 @@ class Board(pygame.sprite.Sprite):
                 for row,colomn in potential_checks:
                     if type(self.pieces.get((row,colomn)))==King:
                         print(f"{color} is in check")
+                        self.king_pos=(row,colomn)
+                        return True
+                    
+    def pink_highlight(self,row,colomn):
+        self.tiles[(row,colomn)].pink_highlight()
     
-    def ctrl_z(self):
-        last_snap_shot=self.game.snap_shot
-        last_snap_shot.apply()
+    
+    def ctrl_z(self,check=False):
+        if self.game.move_history:
+            last_snap_shot = self.game.move_history[-1]
+            self.game.move_history.pop()
+            last_snap_shot.apply()
+            if self.king_pos:
+                self.tiles[*self.king_pos].unhighlight()
+            if check:
+                self.tiles[*self.king_pos].pink_highlight()
+            print("go back")
+
+    def update(self):
+        if pygame.key.get_pressed()[pygame.K_LCTRL] and pygame.key.get_just_pressed()[pygame.K_z]:
+            self.ctrl_z()
+
 
