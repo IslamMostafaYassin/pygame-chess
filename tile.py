@@ -20,7 +20,9 @@ class Tile(pygame.sprite.Sprite):
 
     def putting_piece(self, old_piece):
         if self.left_clicked() and self.board.piece_clicked_row != -1 and self.board.piece_clicked_colomn != -1:
-            if (self.row, self.colomn) in old_piece.get_legal_moves():
+            key = (old_piece.type, old_piece.tile.row, old_piece.tile.colomn)
+
+            if self.board.legal_moves.get(key) and (self.row, self.colomn) in self.board.legal_moves[(key)]:
                 return True
         return False
 
