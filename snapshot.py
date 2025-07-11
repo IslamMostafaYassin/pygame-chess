@@ -17,6 +17,7 @@ class Snap_Shot():
         self.moved_piece.move(self.board.tiles[self.old_row, self.old_colomn])
         self.moved_piece.first_move = self.moved_first_move
         self.board.pieces[(self.old_row,self.old_colomn)]=self.moved_piece
+        self.board.pieces.get((self.new_row, self.new_colomn)).kill()
         self.board.pieces.pop((self.new_row, self.new_colomn))
         self.moved_piece.add(self.board.game.all_group)
         if self.captured_piece:
