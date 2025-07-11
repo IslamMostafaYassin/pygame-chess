@@ -132,25 +132,21 @@ class Board(pygame.sprite.Sprite):
                 potential_checks=piece.get_legal_moves()
                 for row,colomn in potential_checks:
                     if type(self.pieces.get((row,colomn)))==King:
-                        print(f"{color} is in check")
                         self.checked_king_pos=(row,colomn)
                         return True
                     
     
     
-    def ctrl_z(self,manual=True):
+    def ctrl_z(self):
         if self.game.move_history:
             last_snap_shot = self.game.move_history[-1]
             self.game.move_history.pop()
             last_snap_shot.apply()
-            print("go back")
-            print(self.checked_king_pos)
-        if manual:
-            if self.checked_king_pos:
-                self.tiles[*self.checked_king_pos].pink_highlight()
-            else:
-                for tile in self.tiles.values():
-                    tile.unhighlight()
+        if self.checked_king_pos:
+            self.tiles[*self.checked_king_pos].pink_highlight()
+        else:
+            for tile in self.tiles.values():
+                tile.unhighlight()
 
     def update(self):
         if pygame.key.get_pressed()[pygame.K_LCTRL] and pygame.key.get_just_pressed()[pygame.K_z]:

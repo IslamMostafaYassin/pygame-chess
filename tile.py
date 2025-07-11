@@ -58,7 +58,6 @@ class Tile(pygame.sprite.Sprite):
             self.board.unhighlight_moves()
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
-            self.board.check=False
             if self.board.find_check("black" if self.board.turn=="white" else "white"):
                 self.board.ctrl_z()
             elif self.board.find_check(self.board.turn):
@@ -66,7 +65,6 @@ class Tile(pygame.sprite.Sprite):
             else:
                 for tile in self.board.tiles.values():
                     tile.unhighlight()
-            print(self.board.checked_king_pos)
 
         elif self.left_clicked():
             self.board.unhighlight_moves()
