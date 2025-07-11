@@ -66,7 +66,6 @@ class Board(pygame.sprite.Sprite):
             self.pieces[pos] = piece
         
         self.complete_legal_moves(self.turn)
-        print(self.legal_moves)
 
     def highlight_moves(self):
         piece = self.pieces.get(
@@ -161,7 +160,12 @@ class Board(pygame.sprite.Sprite):
 
                     self.ctrl_z()
                     
-                    
+
+    def no_legal_moves(self):
+        for moves in self.legal_moves.values():
+            if moves:
+                return False
+        return True
     
     
     def ctrl_z(self):
