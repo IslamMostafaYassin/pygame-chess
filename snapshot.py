@@ -5,6 +5,7 @@ class Snap_Shot():
         self.board=board
         self.checked_king_pos=self.board.checked_king_pos
         self.moved_piece=moved_piece
+        self.moved_piece_tile=moved_piece.tile
         self.captured_piece=captured_piece
         self.old_row=old_row
         self.old_colomn=old_colomn
@@ -15,6 +16,7 @@ class Snap_Shot():
         self.captured_first_move = captured_piece.first_move if captured_piece else None
     def apply(self):
         self.moved_piece.move(self.board.tiles[self.old_row, self.old_colomn])
+        self.moved_piece.tile=self.moved_piece_tile
         self.moved_piece.first_move = self.moved_first_move
         self.board.pieces[(self.old_row,self.old_colomn)]=self.moved_piece
         self.board.pieces.get((self.new_row, self.new_colomn)).kill()

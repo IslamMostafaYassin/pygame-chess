@@ -58,6 +58,8 @@ class Tile(pygame.sprite.Sprite):
             self.board.unhighlight_moves()
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
+            self.board.complete_legal_moves(self.board.turn)
+            print(self.board.legal_moves)
             if self.board.find_check("black" if self.board.turn=="white" else "white"):
                 self.board.ctrl_z()
             elif self.board.find_check(self.board.turn):

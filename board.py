@@ -8,6 +8,7 @@ class Board(pygame.sprite.Sprite):
         super().__init__(groups)
         self.game = game
         self.turn = "white"
+        self.legal_moves=dict()
         self.checked_king_pos=tuple()
         self.image = pygame.image.load("images/Board.png").convert_alpha()
         self.image = pygame.transform.scale(
@@ -63,6 +64,9 @@ class Board(pygame.sprite.Sprite):
             piece = piece(
                 self.pieces_images[frame], self.tiles[pos], color, self, self.game.all_group)
             self.pieces[pos] = piece
+        
+        self.complete_legal_moves(self.turn)
+        print(self.legal_moves)
 
     def highlight_moves(self):
         piece = self.pieces.get(
@@ -134,6 +138,27 @@ class Board(pygame.sprite.Sprite):
                     if type(self.pieces.get((row,colomn)))==King:
                         self.checked_king_pos=(row,colomn)
                         return True
+    
+    def complete_legal_moves(self, color):
+        self.legal_moves = dict()
+        pieces_copy = list(self.pieces.values())
+
+        for piece in pieces_copy:
+            if piece.color == color:
+                original_row, original_col = piece.tile.row, piece.tile.colomn
+                moves = piece.get_legal_moves()
+
+                for new_row, new_col in moves:
+                    self.move(piece, original_row, original_col, new_row, new_col)
+
+                    if not self.find_check("black" if self.turn == "white" else "white"):
+                        key = (piece.type, original_row, original_col)
+                        if key not in self.legal_moves:
+                            self.legal_moves[key] = []
+                        self.legal_moves[key].append((new_row, new_col))
+
+                    self.ctrl_z()
+                    
                     
     
     

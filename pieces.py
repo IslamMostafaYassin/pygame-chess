@@ -12,6 +12,7 @@ class Piece(pygame.sprite.Sprite):
         self.tile = tile
         self.board = board
         self.first_move = True
+        self.type=None
 
     def get_legal_moves(self):
 
@@ -42,6 +43,7 @@ class Rook(Piece):
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
+        self.type="rook"
 
 
 class Bishup(Piece):
@@ -50,6 +52,7 @@ class Bishup(Piece):
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
+        self.type="bishup"
 
 
 class knight(Piece):
@@ -58,13 +61,14 @@ class knight(Piece):
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
-
+        self.type="knight"
 
 class Queen(Piece):
     DIRECTIONS = Rook.DIRECTIONS+Bishup.DIRECTIONS
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
+        self.type="queen"
 
 
 class King(Piece):
@@ -74,6 +78,7 @@ class King(Piece):
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
+        self.type="king"
 
     def get_legal_moves(self):
         self.legal_moves = []
@@ -123,6 +128,7 @@ class Pawn(Piece):
 
     def __init__(self, image, tile, color, board, groups):
         super().__init__(image, tile, color, board, groups)
+        self.type="pawn"
 
     def get_legal_moves(self):
 
