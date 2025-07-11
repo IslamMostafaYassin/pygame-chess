@@ -71,11 +71,13 @@ class Board(pygame.sprite.Sprite):
     def highlight_moves(self):
         piece = self.pieces.get(
             (self.piece_clicked_row, self.piece_clicked_colomn))
-        for row, colomn in piece.get_legal_moves():
-            tile = self.tiles[(row, colomn)]
-            capturable_piece = self.pieces.get((row, colomn))
-            tile.highlight(True) if capturable_piece else tile.highlight()
-            self.highlighted_tiles.append(tile)
+        key=(piece.type,self.piece_clicked_row, self.piece_clicked_colomn)
+        if self.legal_moves.get(key):
+            for row, colomn in self.legal_moves[key]:
+                tile = self.tiles[(row, colomn)]
+                capturable_piece = self.pieces.get((row, colomn))
+                tile.highlight(True) if capturable_piece else tile.highlight()
+                self.highlighted_tiles.append(tile)
 
     def unhighlight_moves(self,row=None,colomn=None):
         if row and colomn:
