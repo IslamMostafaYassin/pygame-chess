@@ -5,6 +5,8 @@ from board import Board
 class Game():
     def __init__(self):
         pygame.init()
+        self.move_history = []
+        self.snap_shot=None
         self.display_window = pygame.display.set_mode(
             (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.running = True

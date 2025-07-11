@@ -1,7 +1,7 @@
 from settings import *
 from tile import Tile
 from pieces import *
-
+from snapshot import Snap_Shot
 
 class Board(pygame.sprite.Sprite):
     def __init__(self, game, groups):
@@ -79,6 +79,9 @@ class Board(pygame.sprite.Sprite):
         self.highlighted_tiles = []
 
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
+        captured_piece=self.pieces.get((new_row,new_colomn))
+        self.game.snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
+        # self.game.move_history.append(snap_shot)
         piece.move(self.tiles[new_row, new_colomn])
         piece.first_move = False
         if self.pieces.get((new_row, new_colomn)):
@@ -126,4 +129,8 @@ class Board(pygame.sprite.Sprite):
                 for row,colomn in potential_checks:
                     if type(self.pieces.get((row,colomn)))==King:
                         print(f"{color} is in check")
+    
+    def ctrl_z(self):
+        last_snap_shot=self.game.snap_shot
+        last_snap_shot.apply()
 

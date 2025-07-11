@@ -60,3 +60,5 @@ class Tile(pygame.sprite.Sprite):
             self.board.unhighlight_moves()
             self.board.piece_clicked_row = -1
             self.board.piece_clicked_colomn = -1
+        if pygame.key.get_pressed()[pygame.K_LCTRL] and pygame.key.get_just_pressed()[pygame.K_z]:
+            self.board.ctrl_z()
