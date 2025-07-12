@@ -88,7 +88,14 @@ class Board(pygame.sprite.Sprite):
 
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
         captured_piece=self.pieces.get((new_row,new_colomn))
-        snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
+        if piece.type=="pawn" and old_colomn != new_colomn and not captured_piece:
+            captured_piece=self.pieces.get((old_row,new_colomn))
+            snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn,True)
+            if captured_piece:
+                captured_piece.kill()
+                self.pieces.pop((old_row, new_colomn))
+        else:
+            snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
         if self.game.move_history:
             prev_snap_shot=self.game.move_history[-1]
             if prev_snap_shot.moved_piece.type=="king" and abs(prev_snap_shot.new_colomn-prev_snap_shot.old_colomn)==2:

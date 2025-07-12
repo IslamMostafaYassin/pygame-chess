@@ -155,4 +155,8 @@ class Pawn(Piece):
                 (temp_row, temp_colomn))
             if potentially_doomed_piece and potentially_doomed_piece.color != self.color:
                 self.legal_moves.append((temp_row, temp_colomn))
+            if self.board.game.move_history:
+                prev_move=self.board.game.move_history[-1]
+                if prev_move.moved_piece.type=="pawn" and abs(prev_move.new_row-prev_move.old_row)==2 and prev_move.new_row==self.tile.row and prev_move.new_colomn==temp_colomn:
+                    self.legal_moves.append((temp_row, temp_colomn))
         return self.legal_moves
