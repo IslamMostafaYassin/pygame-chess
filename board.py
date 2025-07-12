@@ -135,13 +135,14 @@ class Board(pygame.sprite.Sprite):
         self.turn = "white" if self.turn == "black" else "black"
         self.checked_king_pos=tuple()
     
-    def find_check(self,color):
+    def find_check(self,color,update_checked_king_pos=True):
         for piece in self.pieces.values():
             if piece.color!=color:
                 potential_checks=piece.get_legal_moves()
                 for row,colomn in potential_checks:
                     if type(self.pieces.get((row,colomn)))==King:
-                        self.checked_king_pos=(row,colomn)
+                        if update_checked_king_pos:
+                            self.checked_king_pos=(row,colomn)
                         return True
     
     def complete_legal_moves(self, color):
@@ -156,7 +157,7 @@ class Board(pygame.sprite.Sprite):
                 for new_row, new_col in moves:
                     self.move(piece, original_row, original_col, new_row, new_col)
 
-                    if not self.find_check("black" if self.turn == "white" else "white"):
+                    if not self.find_check("black" if self.turn == "white" else "white",False):
                         key = (piece.type, original_row, original_col)
                         if key not in self.legal_moves:
                             self.legal_moves[key] = []

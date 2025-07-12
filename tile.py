@@ -20,10 +20,10 @@ class Tile(pygame.sprite.Sprite):
 
     def putting_piece(self, old_piece):
         if self.left_clicked() and self.board.piece_clicked_row != -1 and self.board.piece_clicked_colomn != -1:
-            key = (old_piece.type, old_piece.tile.row, old_piece.tile.colomn)
-
-            if self.board.legal_moves.get(key) and (self.row, self.colomn) in self.board.legal_moves[(key)]:
-                return True
+            if old_piece:
+                key = (old_piece.type, old_piece.tile.row, old_piece.tile.colomn)
+                if self.board.legal_moves.get(key) and (self.row, self.colomn) in self.board.legal_moves[(key)]:
+                    return True
         return False
 
     def left_clicked(self):
@@ -62,15 +62,17 @@ class Tile(pygame.sprite.Sprite):
             self.board.move(old_piece, old_row, old_colomn,
                             self.row, self.colomn)
             self.board.complete_legal_moves(self.board.turn)
-            if self.board.no_legal_moves():
-                print(f"{"white" if self.board.turn=="black" else "black"} wins")
-            if self.board.find_check("black" if self.board.turn=="white" else "white"):
-                self.board.ctrl_z()
-            elif self.board.find_check(self.board.turn):
+            if self.board.find_check(self.board.turn):
                 self.board.tiles[*self.board.checked_king_pos].pink_highlight()
+                print(self.board.checked_king_pos)
             else:
                 for tile in self.board.tiles.values():
                     tile.unhighlight()
+            if self.board.no_legal_moves():
+                if self.board.checked_king_pos:
+                    print(f"{"white" if self.board.turn=="black" else "black"} wins")
+                else:
+                    print("stalemate")
 
         elif self.left_clicked():
             self.board.unhighlight_moves()
