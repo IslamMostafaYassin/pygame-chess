@@ -1,6 +1,5 @@
 from settings import *
-
-
+from text import Text
 class Tile(pygame.sprite.Sprite):
     def __init__(self, row, colomn, board, groups):
         super().__init__(groups)
@@ -93,9 +92,9 @@ class Tile(pygame.sprite.Sprite):
             
             if self.board.no_legal_moves():
                 if self.board.checked_king_pos:
-                    print(f"{"white" if self.board.turn=="black" else "black"} wins")
+                    Text(self.board.game.font,f"{"white" if self.board.turn=="black" else "black"} wins","green",(WINDOW_WIDTH/2,WINDOW_HEIGHT/2),self.board.game.all_group)
                 else:
-                    print("stalemate")
+                    Text(self.board.game.font,"stalemate","blue",(WINDOW_WIDTH/2,WINDOW_HEIGHT/2),self.board.game.all_group)
 
         elif self.left_clicked():
             self.board.unhighlight_moves()

@@ -2,6 +2,7 @@ from settings import *
 from tile import Tile
 from pieces import *
 from snapshot import Snap_Shot
+from text import Text
 
 class Board(pygame.sprite.Sprite):
     def __init__(self, game, groups):
@@ -160,7 +161,6 @@ class Board(pygame.sprite.Sprite):
             if piece.color == color:
                 original_row, original_col = piece.tile.row, piece.tile.colomn
                 moves = piece.get_legal_moves()
-                print(self.checked_king_pos)
 
                 for new_row, new_col in moves:
                     self.move(piece, original_row, original_col, new_row, new_col)
@@ -195,6 +195,9 @@ class Board(pygame.sprite.Sprite):
         else:
             for tile in self.tiles.values():
                 tile.unhighlight()
+        for sprite in self.game.all_group:
+            if type(sprite)==Text:
+                sprite.kill()
 
     def update(self):
         if pygame.key.get_pressed()[pygame.K_LCTRL] and pygame.key.get_just_pressed()[pygame.K_z]:

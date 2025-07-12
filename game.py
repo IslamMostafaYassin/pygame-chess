@@ -1,6 +1,7 @@
 from settings import *
 from board import Board
 
+
 class Game():
     def __init__(self):
         pygame.init()
@@ -8,7 +9,7 @@ class Game():
         self.display_window = pygame.display.set_mode(
             (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.running = True
-
+        self.font = pygame.font.Font("fonts/Oxanium-Bold.ttf", 60)
         # make groups
         self.all_group = pygame.sprite.Group()
 
