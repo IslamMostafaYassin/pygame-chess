@@ -160,6 +160,7 @@ class Board(pygame.sprite.Sprite):
             if piece.color == color:
                 original_row, original_col = piece.tile.row, piece.tile.colomn
                 moves = piece.get_legal_moves()
+                print(self.checked_king_pos)
 
                 for new_row, new_col in moves:
                     self.move(piece, original_row, original_col, new_row, new_col)

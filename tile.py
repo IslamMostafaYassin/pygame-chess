@@ -63,8 +63,17 @@ class Tile(pygame.sprite.Sprite):
                             self.row, self.colomn)
             self.board.complete_legal_moves(self.board.turn)
             if self.board.find_check(self.board.turn):
-                self.board.tiles[*self.board.checked_king_pos].pink_highlight()
-                print(self.board.checked_king_pos)
+                king_pos = self.board.checked_king_pos
+                key = ("king", *king_pos)
+                king_moves = self.board.legal_moves.get(key)
+
+                if king_moves:
+                    self.board.legal_moves[key] = [
+                        move for move in king_moves if abs(move[1] - king_pos[1]) != 2
+                    ]
+
+                self.board.tiles[king_pos].pink_highlight()
+
             else:
                 for tile in self.board.tiles.values():
                     tile.unhighlight()
