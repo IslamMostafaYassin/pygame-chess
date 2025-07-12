@@ -89,6 +89,10 @@ class Board(pygame.sprite.Sprite):
     def move(self, piece, old_row, old_colomn, new_row, new_colomn):
         captured_piece=self.pieces.get((new_row,new_colomn))
         snap_shot=Snap_Shot(self,piece,captured_piece,old_row,old_colomn,new_row,new_colomn,self.turn)
+        if self.game.move_history:
+            prev_snap_shot=self.game.move_history[-1]
+            if prev_snap_shot.moved_piece.type=="king" and abs(prev_snap_shot.new_colomn-prev_snap_shot.old_colomn)==2:
+                snap_shot.part_of_casltling=True
         self.game.move_history.append(snap_shot)
         piece.move(self.tiles[new_row, new_colomn])
         piece.first_move = False
@@ -173,6 +177,10 @@ class Board(pygame.sprite.Sprite):
             last_snap_shot = self.game.move_history[-1]
             self.game.move_history.pop()
             last_snap_shot.apply()
+            if last_snap_shot.part_of_casltling:
+                last_snap_shot = self.game.move_history[-1]
+                self.game.move_history.pop()
+                last_snap_shot.apply()
         if self.checked_king_pos:
             self.tiles[*self.checked_king_pos].pink_highlight()
         else:

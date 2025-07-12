@@ -3,6 +3,7 @@ from settings import *
 class Snap_Shot():
     def __init__(self,board,moved_piece,captured_piece,old_row,old_colomn,new_row,new_colomn,turn,):
         self.board=board
+        self.part_of_casltling=False
         self.legal_moves=self.board.legal_moves
         self.checked_king_pos=self.board.checked_king_pos
         self.moved_piece=moved_piece
